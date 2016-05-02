@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         config {
-            storeFile file('key.jks')
+            storeFile file('../key.jks')
             keyAlias 'NewsReader'
             keyPassword '12345678'
             storePassword '12345678'
