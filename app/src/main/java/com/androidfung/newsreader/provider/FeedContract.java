@@ -22,7 +22,7 @@ import android.provider.BaseColumns;
 
 /**
  * Field and table name constants for
- * {@link com.example.android.basicsyncadapter.provider.FeedProvider}.
+ * {@link FeedProvider}.
  */
 public class FeedContract {
     private FeedContract() {
@@ -31,10 +31,10 @@ public class FeedContract {
     /**
      * Content provider authority.
      */
-    public static final String CONTENT_AUTHORITY = "com.example.android.basicsyncadapter";
+    public static final String CONTENT_AUTHORITY = "com.androidfung.newsreader";
 
     /**
-     * Base URI. (content://com.example.android.basicsyncadapter)
+     * Base URI. (content://com.androidfung.newsreader)
      */
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
@@ -85,5 +85,12 @@ public class FeedContract {
          * Date article was published.
          */
         public static final String COLUMN_NAME_PUBLISHED = "published";
+
+
+        //added for tag content which is html
+        public static final String COLUMN_NAME_CONTENT = "content";
+
+        //added for tag summary which is text
+        public static final String COLUMN_NAME_SUMMARY = "summary";
     }
 }

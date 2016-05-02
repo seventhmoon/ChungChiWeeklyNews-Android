@@ -44,6 +44,9 @@ public class FeedParser {
     private static final int TAG_TITLE = 2;
     private static final int TAG_PUBLISHED = 3;
     private static final int TAG_LINK = 4;
+    private static final int TAG_SUMMARY = 5;
+    private static final int TAG_CONTENT = 6;
+
 
     // We don't use XML namespaces
     private static final String ns = null;
@@ -51,7 +54,7 @@ public class FeedParser {
     /** Parse an Atom feed, returning a collection of Entry objects.
      *
      * @param in Atom feed, as a stream.
-     * @return List of {@link com.example.android.basicsyncadapter.net.FeedParser.Entry} objects.
+     * @return List of {@link .net.FeedParser.Entry} objects.
      * @throws XmlPullParserException on error parsing feed.
      * @throws IOException on I/O error.
      */
@@ -72,7 +75,7 @@ public class FeedParser {
      * Decode a feed attached to an XmlPullParser.
      *
      * @param parser Incoming XMl
-     * @return List of {@link com.example.android.basicsyncadapter.net.FeedParser.Entry} objects.
+     * @return List of {@link .net.FeedParser.Entry} objects.
      * @throws XmlPullParserException on error parsing feed.
      * @throws IOException on I/O error.
      */
@@ -129,6 +132,8 @@ public class FeedParser {
         String id = null;
         String title = null;
         String link = null;
+        String summary = null;
+        String content = null;
         long publishedOn = 0;
 
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -156,11 +161,21 @@ public class FeedParser {
                 Time t = new Time();
                 t.parse3339(readTag(parser, TAG_PUBLISHED));
                 publishedOn = t.toMillis(false);
+            } else if (name.equals("summary")) {
+                String tempSummary = readTag(parser, TAG_SUMMARY);
+                if (tempSummary != null){
+                    summary = tempSummary;
+                }
+            } else if (name.equals("content")) {
+                String tempContent = readTag(parser, TAG_CONTENT);
+                if (tempContent != null){
+                    content = tempContent;
+                }
             } else {
                 skip(parser);
             }
         }
-        return new Entry(id, title, link, publishedOn);
+        return new Entry(id, title, link, publishedOn, summary, content);
     }
 
     /**
@@ -180,6 +195,10 @@ public class FeedParser {
                 return readBasicTag(parser, "published");
             case TAG_LINK:
                 return readAlternateLink(parser);
+            case TAG_SUMMARY:
+                return readBasicTag(parser, "summary");
+            case TAG_CONTENT:
+                return readBasicTag(parser, "content");
             default:
                 throw new IllegalArgumentException("Unknown tag type: " + tagType);
         }
@@ -267,12 +286,16 @@ public class FeedParser {
         public final String title;
         public final String link;
         public final long published;
+        public final String summary;
+        public final String content;
 
-        Entry(String id, String title, String link, long published) {
+        Entry(String id, String title, String link, long published, String summary, String content) {
             this.id = id;
             this.title = title;
             this.link = link;
             this.published = published;
+            this.summary = summary;
+            this.content = content;
         }
     }
 }

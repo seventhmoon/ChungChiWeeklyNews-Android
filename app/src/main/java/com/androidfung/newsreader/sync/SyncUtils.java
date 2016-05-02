@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.androidfung.newsreader;
+package com.androidfung.newsreader.sync;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -25,8 +25,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
-import com.example.android.basicsyncadapter.provider.FeedContract;
-import com.example.android.common.accounts.GenericAccountService;
+import com.androidfung.newsreader.common.accounts.GenericAccountService;
+import com.androidfung.newsreader.provider.FeedContract;
 
 /**
  * Static helper methods for working with the sync framework.
@@ -36,7 +36,7 @@ public class SyncUtils {
     private static final String CONTENT_AUTHORITY = FeedContract.CONTENT_AUTHORITY;
     private static final String PREF_SETUP_COMPLETE = "setup_complete";
     // Value below must match the account type specified in res/xml/syncadapter.xml
-    public static final String ACCOUNT_TYPE = "com.example.android.basicsyncadapter.account";
+    public static final String ACCOUNT_TYPE = "com.androidfung.newsreader.account";
 
     /**
      * Create an entry for this application in the system account list, if it isn't already there.

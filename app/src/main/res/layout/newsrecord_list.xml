@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+
+<fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/newsrecord_list"
-    android:name="com.androidfung.newsreader.NewsRecordListFragment"
+    android:id="@+id/headlines_fragment"
+    android:name="com.androidfung.newsreader.ui.NewsRecordListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    app:layoutManager="LinearLayoutManager"
-    tools:context="com.androidfung.newsreader.NewsRecordListActivity"
-    tools:listitem="@layout/newsrecord_list_content" />
+    android:layout_weight="1"
+
+    tools:context=".ui.NewsRecordListActivity"
+ />

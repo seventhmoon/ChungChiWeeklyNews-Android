@@ -25,7 +25,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 
-import com.example.android.common.db.SelectionBuilder;
+import com.androidfung.newsreader.common.db.SelectionBuilder;
+
 
 public class FeedProvider extends ContentProvider {
     FeedDatabase mDatabaseHelper;
@@ -226,6 +227,8 @@ public class FeedProvider extends ContentProvider {
                         FeedContract.Entry.COLUMN_NAME_ENTRY_ID + TYPE_TEXT + COMMA_SEP +
                         FeedContract.Entry.COLUMN_NAME_TITLE    + TYPE_TEXT + COMMA_SEP +
                         FeedContract.Entry.COLUMN_NAME_LINK + TYPE_TEXT + COMMA_SEP +
+                        FeedContract.Entry.COLUMN_NAME_SUMMARY + TYPE_TEXT + COMMA_SEP +
+                        FeedContract.Entry.COLUMN_NAME_CONTENT + TYPE_TEXT + COMMA_SEP +
                         FeedContract.Entry.COLUMN_NAME_PUBLISHED + TYPE_INTEGER + ")";
 
         /** SQL statement to drop "entry" table. */

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.androidfung.newsreader;
+package com.androidfung.newsreader.sync;
 
 import android.accounts.Account;
 import android.annotation.TargetApi;
@@ -65,7 +65,7 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
      * <p>This points to the Android Developers Blog. (Side note: We highly recommend reading the
      * Android Developer Blog to stay up to date on the latest Android platform developments!)
      */
-    private static final String FEED_URL = "http://android-developers.blogspot.com/atom.xml";
+    private static final String FEED_URL = "http://www.news.ccc.cuhk.edu.hk/wp/?feed=atom";
 
     /**
      * Network connection timeout, in milliseconds.
@@ -90,7 +90,10 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
             FeedContract.Entry.COLUMN_NAME_ENTRY_ID,
             FeedContract.Entry.COLUMN_NAME_TITLE,
             FeedContract.Entry.COLUMN_NAME_LINK,
-            FeedContract.Entry.COLUMN_NAME_PUBLISHED};
+            FeedContract.Entry.COLUMN_NAME_PUBLISHED,
+            FeedContract.Entry.COLUMN_NAME_SUMMARY,
+            FeedContract.Entry.COLUMN_NAME_CONTENT,
+    };
 
     // Constants representing column positions from PROJECTION.
     public static final int COLUMN_ID = 0;
@@ -98,6 +101,9 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
     public static final int COLUMN_TITLE = 2;
     public static final int COLUMN_LINK = 3;
     public static final int COLUMN_PUBLISHED = 4;
+    public static final int COLUMN_SUMMARY = 5;
+    public static final int COLUMN_CONTENT = 6;
+
 
     /**
      * Constructor. Obtains handle to content resolver for later use.
@@ -230,6 +236,7 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
         String title;
         String link;
         long published;
+        String summary, content;
         while (c.moveToNext()) {
             syncResult.stats.numEntries++;
             id = c.getInt(COLUMN_ID);
@@ -237,6 +244,8 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
             title = c.getString(COLUMN_TITLE);
             link = c.getString(COLUMN_LINK);
             published = c.getLong(COLUMN_PUBLISHED);
+            summary = c.getString(COLUMN_SUMMARY);
+            content = c.getString(COLUMN_CONTENT);
             FeedParser.Entry match = entryMap.get(entryId);
             if (match != null) {
                 // Entry exists. Remove from entry map to prevent insert later.
@@ -253,6 +262,8 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
                             .withValue(FeedContract.Entry.COLUMN_NAME_TITLE, match.title)
                             .withValue(FeedContract.Entry.COLUMN_NAME_LINK, match.link)
                             .withValue(FeedContract.Entry.COLUMN_NAME_PUBLISHED, match.published)
+                            .withValue(FeedContract.Entry.COLUMN_NAME_SUMMARY, match.summary)
+                            .withValue(FeedContract.Entry.COLUMN_NAME_CONTENT, match.content)
                             .build());
                     syncResult.stats.numUpdates++;
                 } else {
@@ -277,6 +288,8 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
                     .withValue(FeedContract.Entry.COLUMN_NAME_TITLE, e.title)
                     .withValue(FeedContract.Entry.COLUMN_NAME_LINK, e.link)
                     .withValue(FeedContract.Entry.COLUMN_NAME_PUBLISHED, e.published)
+                    .withValue(FeedContract.Entry.COLUMN_NAME_SUMMARY, e.summary)
+                    .withValue(FeedContract.Entry.COLUMN_NAME_CONTENT, e.content)
                     .build());
             syncResult.stats.numInserts++;
         }

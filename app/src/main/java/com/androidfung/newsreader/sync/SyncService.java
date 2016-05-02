@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.androidfung.newsreader;
+package com.androidfung.newsreader.sync;
 
 import android.app.Service;
 import android.content.Intent;

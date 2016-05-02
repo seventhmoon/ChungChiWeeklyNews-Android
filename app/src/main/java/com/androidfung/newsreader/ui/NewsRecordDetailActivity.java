@@ -1,14 +1,16 @@
-package com.androidfung.newsreader;
+package com.androidfung.newsreader.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+
+import com.androidfung.newsreader.R;
 
 /**
  * An activity representing a single NewsRecord detail screen. This
@@ -17,6 +19,8 @@ import android.view.MenuItem;
  * in a {@link NewsRecordListActivity}.
  */
 public class NewsRecordDetailActivity extends AppCompatActivity {
+
+    private static  final String TAG = NewsRecordDetailActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +57,12 @@ public class NewsRecordDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(NewsRecordDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(NewsRecordDetailFragment.ARG_ITEM_ID));
+
+            NewsRecord newsRecord = getIntent().getParcelableExtra(NewsRecordDetailFragment.ARG_ITEM_ID);
+//            Log.d(TAG, String.valueOf(newsRecord == null));
+
+            arguments.putParcelable(NewsRecordDetailFragment.ARG_ITEM_ID,
+                    newsRecord);
             NewsRecordDetailFragment fragment = new NewsRecordDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
