@@ -4,6 +4,9 @@ android {
     signingConfigs {
         config {
             storeFile file('C:/Users/fung/Dropbox/android/my-release-key.keystore')
+            keyAlias 'key_alias'
+            keyPassword 'password'
+            storePassword 'password'
         }
     }
     compileSdkVersion 23
