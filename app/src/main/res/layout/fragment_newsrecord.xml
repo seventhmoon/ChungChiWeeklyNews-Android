@@ -10,12 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"  />
 
     <TextView
         android:id="@+id/textview_timestamp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"  />
 </LinearLayout>

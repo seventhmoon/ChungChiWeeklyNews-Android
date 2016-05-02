@@ -5,6 +5,15 @@
 
     <string name="account_name">FeedSync Service</string>
     <string name="title_entry_detail">Entry Detail</string>
-    <string name="loading">Waiting for sync...</string>
+    <string name="loading">Waiting for sync&#8230;</string>
     <string name="description_refresh">Refresh</string>
+    <string name="open_in_browser">Open in browser</string>
+
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+
+    <string name="widget_title">News Widget</string>
+
+    <!-- this is not real -->
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
 </resources>

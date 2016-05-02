@@ -25,7 +25,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         tools:context=".ui.NewsRecordListActivity"
-        tools:listitem="@layout/newsrecord_list_content" />
+        tools:listitem="@layout/fragment_newsrecord" />
 
     <FrameLayout
         android:id="@+id/newsrecord_detail_container"

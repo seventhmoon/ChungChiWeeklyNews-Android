@@ -7,7 +7,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.androidfung.newsreader.MyApplication;
 import com.androidfung.newsreader.R;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 /**
  * An activity representing a list of NewsRecords. This activity
@@ -26,18 +31,24 @@ public class NewsRecordListActivity extends AppCompatActivity
      */
     private boolean mTwoPane;
     private NewsRecord mNewsRecord;
+    private static final int MY_PERMISSIONS_REQUEST = 0x01;
+    private FloatingActionButton mFabShare;
+//    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_newsrecord_list);
 
+//        MyApplication application = (MyApplication) getApplication();
+//        mTracker = application.getDefaultTracker();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mFabShare = (FloatingActionButton) findViewById(R.id.fab);
+        mFabShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent sendIntent = new Intent();
@@ -46,14 +57,9 @@ public class NewsRecordListActivity extends AppCompatActivity
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
 
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
             }
         });
 
-//        View recyclerView = findViewById(R.id.newsrecord_list);
-//        assert recyclerView != null;
-//        setupRecyclerView((RecyclerView) recyclerView);
 
         if (findViewById(R.id.newsrecord_detail_container) != null) {
             // The detail container view will be present only in the
@@ -62,13 +68,22 @@ public class NewsRecordListActivity extends AppCompatActivity
             // activity should be in two-pane mode.
             mTwoPane = true;
         }
+
+        AdView adView = (AdView) findViewById(R.id.adView);
+        if (adView != null){
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+        }
+
+//        AnalyticsTrackers.initialize(this);
+        startTracking();
     }
+
 
     @Override
     public void onListItemClicked(NewsRecord newsRecord) {
         mNewsRecord = newsRecord;
         if (mTwoPane) {
-//            NewsRecordDetailFragment newsRecordDetailFragment = NewsRecordDetailFragment.newInstance()
 
             Bundle arguments = new Bundle();
             arguments.putParcelable(NewsRecordDetailFragment.ARG_ITEM_ID,
@@ -79,6 +94,7 @@ public class NewsRecordListActivity extends AppCompatActivity
                     .replace(R.id.newsrecord_detail_container, fragment)
                     .commit();
 
+            mFabShare.setVisibility(View.VISIBLE);
 
         } else {
             Intent intent = new Intent(this, NewsRecordDetailActivity.class);
@@ -87,76 +103,15 @@ public class NewsRecordListActivity extends AppCompatActivity
         }
     }
 
-//    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-//        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
-//    }
+    private void startTracking() {
+        // Get tracker.
+        Tracker t = ((MyApplication) this.getApplication()).getDefaultTracker();
 
-//    public class SimpleItemRecyclerViewAdapter
-//            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
-//
-//        private final List<DummyContent.DummyItem> mValues;
-//
-//        public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
-//            mValues = items;
-//        }
-//
-//        @Override
-//        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//            View view = LayoutInflater.from(parent.getContext())
-//                    .inflate(R.layout.newsrecord_list_content, parent, false);
-//            return new ViewHolder(view);
-//        }
-//
-//        @Override
-//        public void onBindViewHolder(final ViewHolder holder, int position) {
-//            holder.mItem = mValues.get(position);
-//            holder.mIdView.setText(mValues.get(position).id);
-//            holder.mContentView.setText(mValues.get(position).content);
-//
-//            holder.mView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (mTwoPane) {
-//                        Bundle arguments = new Bundle();
-//                        arguments.putString(NewsRecordDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-//                        NewsRecordDetailFragment fragment = new NewsRecordDetailFragment();
-//                        fragment.setArguments(arguments);
-//                        getSupportFragmentManager().beginTransaction()
-//                                .replace(R.id.newsrecord_detail_container, fragment)
-//                                .commit();
-//                    } else {
-//                        Context context = v.getContext();
-//                        Intent intent = new Intent(context, NewsRecordDetailActivity.class);
-//                        intent.putExtra(NewsRecordDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-//
-//                        context.startActivity(intent);
-//                    }
-//                }
-//            });
-//        }
-//
-//        @Override
-//        public int getItemCount() {
-//            return mValues.size();
-//        }
-//
-//        public class ViewHolder extends RecyclerView.ViewHolder {
-//            public final View mView;
-//            public final TextView mIdView;
-//            public final TextView mContentView;
-//            public DummyContent.DummyItem mItem;
-//
-//            public ViewHolder(View view) {
-//                super(view);
-//                mView = view;
-//                mIdView = (TextView) view.findViewById(R.id.id);
-//                mContentView = (TextView) view.findViewById(R.id.content);
-//            }
-//
-//            @Override
-//            public String toString() {
-//                return super.toString() + " '" + mContentView.getText() + "'";
-//            }
-//        }
-//    }
+        // Set screen name.
+        // Where path is a String representing the screen name.
+        t.setScreenName(this.getLocalClassName());
+
+        // Send a screen view.
+        t.send(new HitBuilders.ScreenViewBuilder().build());
+    }
 }

@@ -3,14 +3,16 @@ package com.androidfung.newsreader.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.androidfung.newsreader.MyApplication;
 import com.androidfung.newsreader.R;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 /**
  * An activity representing a single NewsRecord detail screen. This
@@ -21,6 +23,7 @@ import com.androidfung.newsreader.R;
 public class NewsRecordDetailActivity extends AppCompatActivity {
 
     private static  final String TAG = NewsRecordDetailActivity.class.getSimpleName();
+    private NewsRecord mNewsRecord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +32,32 @@ public class NewsRecordDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
+        if (savedInstanceState == null) {
+            // Create the detail fragment and add it to the activity
+            // using a fragment transaction.
+            Bundle arguments = new Bundle();
+
+            mNewsRecord = getIntent().getParcelableExtra(NewsRecordDetailFragment.ARG_ITEM_ID);
+//            Log.d(TAG, String.valueOf(newsRecord == null));
+
+            arguments.putParcelable(NewsRecordDetailFragment.ARG_ITEM_ID,
+                    mNewsRecord);
+            NewsRecordDetailFragment fragment = new NewsRecordDetailFragment();
+            fragment.setArguments(arguments);
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.newsrecord_detail_container, fragment)
+                    .commit();
+        }
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, mNewsRecord.getTtile() + " - " + mNewsRecord.getLink());
+                sendIntent.setType("text/plain");
+                startActivity(sendIntent);
             }
         });
 
@@ -53,22 +76,7 @@ public class NewsRecordDetailActivity extends AppCompatActivity {
         //
         // http://developer.android.com/guide/components/fragments.html
         //
-        if (savedInstanceState == null) {
-            // Create the detail fragment and add it to the activity
-            // using a fragment transaction.
-            Bundle arguments = new Bundle();
-
-            NewsRecord newsRecord = getIntent().getParcelableExtra(NewsRecordDetailFragment.ARG_ITEM_ID);
-//            Log.d(TAG, String.valueOf(newsRecord == null));
-
-            arguments.putParcelable(NewsRecordDetailFragment.ARG_ITEM_ID,
-                    newsRecord);
-            NewsRecordDetailFragment fragment = new NewsRecordDetailFragment();
-            fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.newsrecord_detail_container, fragment)
-                    .commit();
-        }
+        startTracking();
     }
 
     @Override
@@ -85,5 +93,17 @@ public class NewsRecordDetailActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void startTracking() {
+        // Get tracker.
+        Tracker t = ((MyApplication) this.getApplication()).getDefaultTracker();
+
+        // Set screen name.
+        // Where path is a String representing the screen name.
+        t.setScreenName(this.getLocalClassName());
+
+        // Send a screen view.
+        t.send(new HitBuilders.ScreenViewBuilder().build());
     }
 }

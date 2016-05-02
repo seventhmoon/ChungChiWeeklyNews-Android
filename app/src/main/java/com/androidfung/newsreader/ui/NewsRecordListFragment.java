@@ -39,6 +39,8 @@ public class NewsRecordListFragment extends ListFragment
 
     private static final String TAG = NewsRecordListFragment.class.getSimpleName();
 
+    private ListView mListView;
+
     public interface  OnFragmentInteractionListener{
         void onListItemClicked(NewsRecord newsRecord);
     }
